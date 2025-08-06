@@ -1,28 +1,50 @@
 from enum import Enum
-from fastapi import FastAPI,Query
+from fastapi import Body, FastAPI,Query
 from typing import Annotated, Literal, Union
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated, Literal
 
 app = FastAPI()
 
+#본문- 필드
+
+class Item(BaseModel):
+    name:str
+    description:str | None = Field(
+        default=None,
+        title="The description of the item",
+        max_length=300
+    )
+    price: float =Field(gt=0, description="The price must be greater than zero")
+    tax:float | None = None
+    
+    
+
+@app.put("/items/{item_id}")
+async def update_item(item_id:int,item:Annotated[Item,Body(embed=True)]):
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+
+
 
 
     
-class FilterParams(BaseModel):
-    model_config = {"extra": "forbid"}
+# class FilterParams(BaseModel):
+#     model_config = {"extra": "forbid"}
 
-    limit:int =Field(100, gt=0, le=100)    
-    offset:int = Field(0, ge=0)
-    order_by:Literal["created_at", "updated_at"] = "created_at"
-    tags:list[str] =[]
+#     limit:int =Field(100, gt=0, le=100)    
+#     offset:int = Field(0, ge=0)
+#     order_by:Literal["created_at", "updated_at"] = "created_at"
+#     tags:list[str] =[]
     
     
 
-# 쿼리 매개변수 모델
-@app.get("/items/")
-async def read_items(filter_query: Annotated[FilterParams , Query()]):
-    return filter_query
+# # 쿼리 매개변수 모델
+# @app.get("/items/")
+# async def read_items(filter_query: Annotated[FilterParams , Query()]):
+#     return filter_query
 
 
 
