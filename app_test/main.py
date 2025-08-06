@@ -1,13 +1,19 @@
 from enum import Enum
+from re import U
 from fastapi import Body, FastAPI,Query
-from typing import Annotated, Literal, Union
-from pydantic import BaseModel, Field
+from typing import Annotated, Literal, Union, List ,Set
+from pydantic import BaseModel, Field , HttpUrl
 from typing_extensions import Annotated, Literal
 
 app = FastAPI()
 
 #본문- 필드
 
+class Image(BaseModel):
+    url: HttpUrl
+    name: str
+    
+    
 class Item(BaseModel):
     name:str
     description:str | None = Field(
@@ -16,14 +22,53 @@ class Item(BaseModel):
         max_length=300
     )
     price: float =Field(gt=0, description="The price must be greater than zero")
-    tax:float | None = None
+    tax:List[str] = []
+    tags:Set[str]=set()
+    images: Union[List[Image], None] = None
+
+
+
+class Offer(BaseModel):
+    name: str
+    description: Union[str, None] = None
+    price:float
+    items: List[Item] = []
     
     
 
-@app.put("/items/{item_id}")
-async def update_item(item_id:int,item:Annotated[Item,Body(embed=True)]):
-    results = {"item_id": item_id, "item": item}
-    return results
+@app.post("/offers/")
+async def create_offer(offer:Offer)    :
+    return offer
+    
+    
+
+@app.post("/images/multiple/")    
+async def create_multiple_images(images :list[Image]):
+    for image in images:
+        image.url
+        
+    
+    
+@app.get("/index-weights/")
+async def create_index_weights(weights: dict[int, float]):
+    return weights
+
+
+#Pydantic 모델 속 추가 JSON 스키마 데이터¶
+    
+# @app.post("/items/{item_id}")
+# async def update_item(item_id:int, item: Item)    :
+#      results= {"item_id": item_id, "item": item}
+#      return results
+    
+    
+    
+    
+
+# @app.put("/items/{item_id}")
+# async def update_item(item_id:int,item:Annotated[Item,Body(embed=True)]):
+#     results = {"item_id": item_id, "item": item}
+#     return results
 
 
 
