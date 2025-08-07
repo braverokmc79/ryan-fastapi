@@ -1,0 +1,18 @@
+
+### 헤더매개변수
+curl -X GET "http://127.0.0.1:7000/items/" \
+  -H "X-Token: token1" \
+  -H "X-Token: token2" \
+  -H "X-Token: token3"
+
+
+
+
+
+
+### 쿠키매개변수모델
+curl -X GET "http://127.0.0.1:7000/items/" \
+  --cookie "session_id=abc123; fatebook_tracker=fb456; googall_tracker=ga789"
+
+
+

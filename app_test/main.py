@@ -1,9 +1,11 @@
 from enum import Enum
 from re import U
-from fastapi import Body, FastAPI,Query
+from unittest import result
+from fastapi import Body, FastAPI, Query
 from typing import Annotated, Literal, Union, List ,Set
 from pydantic import BaseModel, Field , HttpUrl
 from typing_extensions import Annotated, Literal
+
 
 app = FastAPI()
 
@@ -28,30 +30,42 @@ class Item(BaseModel):
 
 
 
-class Offer(BaseModel):
-    name: str
-    description: Union[str, None] = None
-    price:float
-    items: List[Item] = []
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, item :Annotated[Item, Body(embed=True)]):
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+#Field는 Query, Path와 Body와 같은 방식으로 동작하며, 모두 같은 매개변수들 등을 가집니다.
+
+
+
+
+
+# class Offer(BaseModel):
+#     name: str
+#     description: Union[str, None] = None
+#     price:float
+#     items: List[Item] = []
     
     
 
-@app.post("/offers/")
-async def create_offer(offer:Offer)    :
-    return offer
+# @app.post("/offers/")
+# async def create_offer(offer:Offer)    :
+#     return offer
     
     
 
-@app.post("/images/multiple/")    
-async def create_multiple_images(images :list[Image]):
-    for image in images:
-        image.url
+# @app.post("/images/multiple/")    
+# async def create_multiple_images(images :list[Image]):
+#     for image in images:
+#         image.url
         
     
     
-@app.get("/index-weights/")
-async def create_index_weights(weights: dict[int, float]):
-    return weights
+# @app.get("/index-weights/")
+# async def create_index_weights(weights: dict[int, float]):
+#     return weights
 
 
 #Pydantic 모델 속 추가 JSON 스키마 데이터¶
