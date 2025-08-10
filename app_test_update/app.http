@@ -1,0 +1,26 @@
+
+### 헤더매개변수
+curl -X GET "http://127.0.0.1:7000/items/" \
+  -H "X-Token: token1" \
+  -H "X-Token: token2" \
+  -H "X-Token: token3"
+
+
+
+
+
+
+### 쿠키매개변수모델
+curl -X GET "http://127.0.0.1:7000/items/" \
+  --cookie "session_id=abc123; fatebook_tracker=fb456; googall_tracker=ga789"
+
+
+###  폼모델
+curl -X POST "http://127.0.0.1:7000/login/" -H "Content-Type: application/x-www-form-urlencoded" -d "username=admin&password=1234"
+
+
+
+### 🔗 GET /users/me
+GET http://localhost:7000/users/me
+Authorization: Bearer <your-token>
+
